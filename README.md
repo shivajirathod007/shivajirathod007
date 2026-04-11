@@ -1,18 +1,17 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d0d0d,100:00ff41&height=120&section=header&text=KAAL&fontSize=60&fontColor=00ff41&animation=fadeIn&fontAlignY=38&desc=You+won't+feel+me+until+it's+too+late.&descAlignY=60&descSize=14&descColor=888888"/>
+```
+██╗  ██╗ █████╗  █████╗ ██╗
+██║ ██╔╝██╔══██╗██╔══██╗██║
+█████╔╝ ███████║███████║██║
+██╔═██╗ ██╔══██║██╔══██║██║
+██║  ██╗██║  ██║██║  ██║███████╗
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+```
 
-</div>
+*"You won't feel me until it's too late."*
 
-<div align="center">
-
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=16&duration=3000&pause=1000&color=00FF41&center=true&vCenter=true&multiline=true&width=600&height=60&lines=Shivaji+Rathod+%7C+Security+Engineer+%7C+System+Builder;Cryptography+%7C+Threat+Detection+%7C+Bug+Bounty+%7C+CTF)](https://git.io/typing-svg)
-
-</div>
-
----
-
-<div align="center">
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=15&duration=3000&pause=1000&color=3fb950&center=true&vCenter=true&width=600&height=40&lines=Shivaji+Rathod+%7C+Security+Engineer+%7C+System+Builder;Cryptography+%7C+Threat+Detection+%7C+Bug+Bounty+%7C+CTF)](https://git.io/typing-svg)
 
 [![GitHub](https://img.shields.io/badge/GitHub-shivajirathod007-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/shivajirathod007)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-shivaji--rathod007-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/shivaji-rathod007)
@@ -21,9 +20,7 @@
 
 ---
 
-I build systems that sit at the edge — between what's secure and what's already compromised. My work spans post-quantum cryptography, ML-based threat detection, and real-world deployments that don't just demo well but actually run in production.
-
-Currently: cloud security engineering, bug bounty hunting, and CTF grinding.
+I build security systems and full-stack platforms that run in production — from ML-based threat detection to post-quantum cryptography scanners. Currently doing cloud security engineering, bug bounty, and CTF.
 
 ---
 
@@ -46,22 +43,23 @@ Currently: cloud security engineering, bug bounty hunting, and CTF grinding.
 
 > *"Find every cryptographic weakness before a quantum computer does."*
 
+**[→ github.com/shivajirathod007/TRINETRA](https://github.com/shivajirathod007/TRINETRA)**
+
 Built for the **PNB Hackathon** by **Team ZeroHour**.
 
-CRQCs are projected to arrive between 2028–2037. When they do, every RSA, ECDSA, and ECDHE-protected system becomes retroactively decryptable — including data intercepted today (Harvest Now, Decrypt Later). Most financial institutions have no inventory of their own cryptographic exposure.
-
-TRINETRA fixes that.
+CRQCs are projected to arrive between 2028–2037. When they do, every RSA, ECDSA, and ECDHE-protected system becomes retroactively decryptable — including data intercepted today (Harvest Now, Decrypt Later). Most financial institutions have no inventory of their own cryptographic exposure. TRINETRA fixes that.
 
 **What it does:**
-- Discovers every public-facing asset of a target domain via CT log mining — finds shadow subdomains that port scanners miss
+- Discovers every public-facing asset via CT log mining — finds shadow subdomains that port scanners miss
 - Deep cryptographic analysis across TLS, certificates, APIs, VPNs (Cisco AnyConnect, Fortinet, Palo Alto, OpenVPN), SSH, and email
 - API crypto detection using **DistilBERT NLP** — finds RS256 buried in JSON response bodies, not just headers
 - Produces a machine-verifiable **Cryptographic Bill of Materials (CBOM)**
 - Scores exposure using the **QARS formula** (MDPI 2025) with Mosca's theorem integration
 - Outputs NIST-aligned migration plans and signed PQC readiness certificates
 - SSH audit compliant with **NIST SP 1800-38B** — host key and KEX analysis
+- **JARSH** — built-in AI assistant for interpreting scan results and guiding remediation
 
-**What separates it from every other tool:**
+**What separates it:**
 
 | Capability | Typical Tools | TRINETRA |
 |---|---|---|
@@ -72,8 +70,6 @@ TRINETRA fixes that.
 | Output | Score only | CBOM + migration plan + signed certificate |
 | VPN detection | None | Cisco AnyConnect, Fortinet, Palo Alto, OpenVPN |
 | SSH analysis | None | NIST SP 1800-38B compliant audit |
-
-Includes **JARSH** — an AI assistant for interpreting scan results and guiding remediation.
 
 </details>
 
@@ -88,30 +84,21 @@ Secure, real-time case management platform currently piloting at Warje Police St
 
 - Role-based dashboards for officers and administrators
 - Automated investigation reminders and case lifecycle tracking
-- Multilingual support — Marathi and English
-- Built with encrypted data pipelines and access-controlled APIs
+- Multilingual — Marathi and English
+- Encrypted data pipelines, access-controlled APIs
+
+*Repo: private — active deployment*
 
 </details>
 
 <br/>
 
 <details>
-<summary><b>Adaptive WAF Using AI</b> &nbsp;<code>TensorFlow · LSTM Autoencoder · Python · Node.js</code> — Showcased at DIPEX 2025</summary>
+<summary><b>Adaptive WAF Using AI</b> &nbsp;<code>TensorFlow · LSTM Autoencoder · Python · Node.js</code></summary>
 
 <br/>
 
-Smart firewall detecting SQLi, XSS, DDoS, and traffic anomalies in real time. 94% accuracy on a hybrid dataset combining custom traffic logs and public security corpora. Live monitoring dashboard. Presented to 800+ students, professors, and industry experts at COEP.
-
-</details>
-
-<br/>
-
-<details>
-<summary><b>Scholar-Sandbox</b> &nbsp;<code>JavaScript · Apache 2.0</code></summary>
-
-<br/>
-
-AI-driven safe academic resource analyzer with teach-back mechanisms. Analyzes academic content for safety and integrity, then reinforces understanding through structured teach-back flows.
+Firewall detecting SQLi, XSS, DDoS, and traffic anomalies in real time. 94% accuracy on a hybrid dataset combining custom traffic logs and public security corpora. Live monitoring dashboard. Showcased at DIPEX 2025 (COEP) to 800+ attendees.
 
 </details>
 
@@ -143,12 +130,22 @@ Platforms     →  AWS · Supabase · Docker · Git
 
 ---
 
+## Hack The Box
+
+<div align="center">
+
+[![HTB Profile](https://www.hackthebox.com/badge/image/019d7d12-4cb3-730e-8103-10aecf11e0fc)](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc)
+
+[→ profile.hackthebox.com/SHIVAZZ](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc)
+
+</div>
+
+---
+
 ## Certifications
 
 - Cyber Threat Intelligence — Arcx
-- Cyber Security Analyst — TATA Forage
 - Computer Forensics & Digital Forensics — Udemy
-- Software Engineer — HackerRank
 
 ---
 
@@ -156,22 +153,18 @@ Platforms     →  AWS · Supabase · Docker · Git
 
 <div align="center">
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=shivajirathod007&theme=react-dark&hide_border=true&area=true&color=00ff41&line=00ff41&point=ffffff" width="100%"/>
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=shivajirathod007&theme=react-dark&hide_border=true&area=true&color=3fb950&line=3fb950&point=ffffff" width="100%"/>
 
-</div>
+<br/>
 
-<div align="center">
-
-<img src="https://streak-stats.demolab.com?user=shivajirathod007&theme=dark&hide_border=true&ring=00ff41&fire=00ff41&currStreakLabel=00ff41" width="49%"/>
+<img src="https://streak-stats.demolab.com?user=shivajirathod007&theme=dark&hide_border=true&ring=3fb950&fire=3fb950&currStreakLabel=3fb950" width="49%"/>
 &nbsp;
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=shivajirathod007&layout=compact&theme=dark&hide_border=true&langs_count=6&title_color=00ff41" width="42%"/>
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=shivajirathod007&layout=compact&theme=dark&hide_border=true&langs_count=6&title_color=3fb950" width="42%"/>
 
 </div>
 
 ---
 
 <div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00ff41,100:0d0d0d&height=80&section=footer&fontSize=12&fontColor=888888&text=The+logs+always+tell+the+truth.&fontAlignY=65"/>
-
+<sub>The logs always tell the truth.</sub>
 </div>
