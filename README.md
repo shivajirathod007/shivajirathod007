@@ -13,6 +13,7 @@
 [![GitHub](https://img.shields.io/badge/-shivajirathod007-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shivajirathod007)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/shivaji-rathod007)
 [![HTB](https://img.shields.io/badge/-HackTheBox-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black)](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc)
+[![Instagram](https://img.shields.io/badge/-Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_.shiva_.007/)
 
 </div>
 
@@ -143,13 +144,20 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ---
 
+</div>
+
+---
+
 ### ⬡ Hack The Box
 
 <div align="center">
 
-<a href="https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc">
-  <img src="https://www.hackthebox.com/badge/image/019d7d12-4cb3-730e-8103-10aecf11e0fc" alt="HTB Badge" height="180"/>
-</a>
+[![HTB Profile](https://img.shields.io/badge/Hack%20The%20Box-Profile-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black&labelColor=181717)](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc)
+
+**Profile:** [kaal](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc) · Rank: **Master** 🏆  
+**Stats:** 255+ Contributions · Longest Streak: 42 weeks 🔥  
+
+> Aspiring security engineer solving machines, CTFs, and real-world hacking challenges
 
 </div>
 
