@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="120" viewBox="0 0 480 120" fill="none">
+  <style>
+    .title { font: 700 13px 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #3fb950; letter-spacing: 1px; }
+    .label { font: 500 10px 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 0.5px; }
+    .value { font: 700 18px 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e6edf3; }
+    .card { fill: #0d1117; stroke: #21262d; stroke-width: 1; rx: 6px; }
+    .divider { stroke: #21262d; stroke-width: 1; }
+  </style>
+  <rect width="478" height="118" x="1" y="1" class="card"/>
+  
+  <!-- Header -->
+  <path d="M20 22 L25 17 L30 22" stroke="#3fb950" stroke-width="2" fill="none" />
+  <text x="35" y="21" class="title">TRYHACKME PROFILE STATUS</text>
+  <line x1="20" y1="32" x2="460" y2="32" class="divider" />
+  
+  <!-- Stats columns -->
+  <!-- Column 1: Rank -->
+  <text x="20" y="55" class="label">RANK</text>
+  <text x="20" y="80" class="value">Loading...</text>
+  
+  <!-- Column 2: Completed -->
+  <text x="130" y="55" class="label">COMPLETED ROOMS</text>
+  <text x="130" y="80" class="value">Loading...</text>
+  
+  <!-- Column 3: Badges -->
+  <text x="280" y="55" class="label">BADGES</text>
+  <text x="280" y="80" class="value">Loading...</text>
+  
+  <!-- Column 4: Streak -->
+  <text x="380" y="55" class="label">STREAK</text>
+  <text x="380" y="80" class="value">Loading... 🔥</text>
+</svg>

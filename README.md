@@ -10,9 +10,10 @@
 
 <br/>
 
-[![GitHub](https://img.shields.io/badge/-shivajirathod007-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shivajirathod007)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shivajirathod007)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/shivaji-rathod007)
-[![HTB](https://img.shields.io/badge/-HackTheBox-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black)](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc)
+[![TryHackMe](https://img.shields.io/badge/-TryHackMe-1F1F2E?style=for-the-badge&logo=tryhackme&logoColor=red)](https://tryhackme.com/p/hey.nexxum)
+[![Google Skills](https://img.shields.io/badge/-Google%20Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white)](https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063)
 [![Instagram](https://img.shields.io/badge/-Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_.shiva_.007/)
 
 </div>
@@ -148,36 +149,39 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ---
 
-### ⬡ Hack The Box
+### ⬡ TryHackMe Activity
 
+<!-- thm-stats-start -->
 <div align="center">
-
-[![HTB Profile](https://img.shields.io/badge/Hack%20The%20Box-Profile-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black&labelColor=181717)](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc)
-
-**Profile:** [kaal](https://profile.hackthebox.com/profile/019d7d12-4cb3-730e-8103-10aecf11e0fc) · Rank: **Master** 🏆  
-**Stats:** 255+ Contributions · Longest Streak: 42 weeks 🔥  
-
-> Aspiring security engineer solving machines, CTFs, and real-world hacking challenges
-
+  <img src="assets/thm-stats.svg" alt="TryHackMe Stats" width="480" />
 </div>
+
+<br/>
+
+#### ⬡ Recent Completed Rooms
+| Room Name | Link |
+| :--- | :--- |
+| **Linux Fundamentals Part 3** | [Room Link](https://tryhackme.com/room/linuxfundamentalspart3) |
+| **Linux Fundamentals Part 2** | [Room Link](https://tryhackme.com/room/linuxfundamentalspart2) |
+| **Linux Fundamentals Part 1** | [Room Link](https://tryhackme.com/room/linuxfundamentalspart1) |
+
+<br/>
+
+#### ⬡ TryHackMe Yearly Activity
+<div align="center">
+  <a href="https://tryhackme.com/p/hey.nexxum?tab=yearly-activity" target="_blank">
+    <img src="assets/thm-yearly-activity.png" alt="TryHackMe Yearly Activity" width="100%" style="border-radius: 6px; border: 1px solid #30363d;" />
+  </a>
+</div>
+<!-- thm-stats-end -->
 
 ---
 
-### ⬡ GitHub Activity
+### ⬡ Cloud Security & Learning
 
-<div align="center">
+**Google Cloud Skills Boost Profile:** [Google Cloud Profile](https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063)
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=shivajirathod007&theme=react-dark&hide_border=true&area=true&color=3fb950&line=3fb950&point=3fb950&bg_color=0d1117" width="100%"/>
-
-</div>
-
-<div align="center">
-
-<img src="https://streak-stats.demolab.com?user=shivajirathod007&theme=transparent&hide_border=true&ring=3fb950&fire=3fb950&currStreakLabel=3fb950&sideLabels=3fb950&dates=6e7681" width="48%"/>
-&nbsp;&nbsp;
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=shivajirathod007&layout=compact&theme=transparent&hide_border=true&langs_count=6&title_color=3fb950&text_color=cccccc" width="40%"/>
-
-</div>
+> Hands-on labs and learning paths focusing on cloud infrastructure security, IAM policy design, and security architecture.
 
 ---
 
@@ -201,6 +205,7 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 ```
 Cyber Threat Intelligence     Arcx      2025
 Computer Forensics & DFIR     Udemy     2025
+Cloud Security Engineer Path  Google    2026
 ```
 
 ---
