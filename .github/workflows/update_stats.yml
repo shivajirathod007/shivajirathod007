@@ -24,7 +24,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install playwright
+          pip install playwright playwright-stealth
 
       - name: Install Playwright Browsers and System Dependencies
         run: |

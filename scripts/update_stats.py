@@ -4,6 +4,10 @@ import re
 import sys
 import argparse
 from playwright.async_api import async_playwright
+try:
+    from playwright_stealth import stealth_async
+except ImportError:
+    stealth_async = None
 
 # Selector helpers for TryHackMe page
 JS_EXTRACT_STATS = r"""
@@ -93,6 +97,41 @@ def generate_svg(stats):
 </svg>
 """
 
+def generate_gcp_svg(stats):
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="480" height="120" viewBox="0 0 480 120" fill="none">
+  <style>
+    .title {{ font: 700 13px 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #4285F4; letter-spacing: 1px; }}
+    .label {{ font: 500 10px 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 0.5px; }}
+    .value {{ font: 700 18px 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e6edf3; }}
+    .card {{ fill: #0d1117; stroke: #21262d; stroke-width: 1; rx: 6px; }}
+    .divider {{ stroke: #21262d; stroke-width: 1; }}
+  </style>
+  <rect width="478" height="118" x="1" y="1" class="card"/>
+  
+  <!-- Header -->
+  <path d="M20 22 L25 17 L30 22" stroke="#4285F4" stroke-width="2" fill="none" />
+  <text x="35" y="21" class="title">GOOGLE CLOUD SKILLS BOOST STATUS</text>
+  <line x1="20" y1="32" x2="460" y2="32" class="divider" />
+  
+  <!-- Stats columns -->
+  <!-- Column 1: Member Since -->
+  <text x="20" y="55" class="label">MEMBER SINCE</text>
+  <text x="20" y="80" class="value">{stats.get('member_since', 'N/A')}</text>
+  
+  <!-- Column 2: League -->
+  <text x="140" y="55" class="label">LEAGUE</text>
+  <text x="140" y="80" class="value">{stats.get('league', 'N/A')} 💎</text>
+  
+  <!-- Column 3: Points -->
+  <text x="280" y="55" class="label">POINTS</text>
+  <text x="280" y="80" class="value">{stats.get('points', '0')}</text>
+  
+  <!-- Column 4: Badges -->
+  <text x="380" y="55" class="label">BADGES</text>
+  <text x="380" y="80" class="value">{stats.get('badges_count', '0')}</text>
+</svg>
+"""
+
 async def run(username, dry_run=False):
     print(f"Starting TryHackMe scraping for user: {username}...")
     
@@ -101,7 +140,7 @@ async def run(username, dry_run=False):
         os.makedirs("assets", exist_ok=True)
         
     async with async_playwright() as p:
-        # Use local system Google Chrome if available (to bypass local download issues)
+        # Configure launch options for stealth & system browser execution
         chrome_path = "/usr/bin/google-chrome"
         launch_args = {
             "headless": False,  # Running headful is the most reliable way to bypass Cloudflare/Vercel
@@ -111,7 +150,12 @@ async def run(username, dry_run=False):
                 "--disable-setuid-sandbox"
             ]
         }
-        if os.path.exists(chrome_path):
+        
+        # Use Chrome channel on GitHub Actions (pre-installed), or local path
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            launch_args["channel"] = "chrome"
+            print("Running on GitHub Actions: Using pre-installed Chrome channel")
+        elif os.path.exists(chrome_path):
             launch_args["executable_path"] = chrome_path
             print(f"Using system Google Chrome at: {chrome_path}")
             
@@ -125,6 +169,11 @@ async def run(username, dry_run=False):
         await context.add_init_script("delete Object.getPrototypeOf(navigator).webdriver;")
         
         page = await context.new_page()
+        
+        # Apply playwright stealth if available
+        if stealth_async:
+            await stealth_async(page)
+            print("Stealth mode enabled for the browser session.")
         
         # Load profile page first to initialize security/session bypass
         url_profile = f"https://tryhackme.com/p/{username}"
@@ -223,16 +272,51 @@ async def run(username, dry_run=False):
             if not dry_run:
                 await page.screenshot(path="assets/thm-yearly-activity.png")
                 
+        # Fetch Google Cloud Skills Boost profile data
+        url_gcp = "https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063"
+        print(f"Navigating to Google Cloud Skills Boost: {url_gcp}")
+        gcp_stats = {"member_since": "2025", "league": "N/A", "points": "0", "badges_count": "0"}
+        try:
+            await page.goto(url_gcp, wait_until="domcontentloaded", timeout=45000)
+            await page.wait_for_timeout(3000)
+            gcp_text = await page.evaluate("document.body.innerText")
+            
+            # Extract GCP stats
+            league_match = re.search(r'(Diamond|Gold|Silver|Bronze|Platinum)\s+League', gcp_text, re.IGNORECASE)
+            if league_match:
+                gcp_stats["league"] = league_match.group(0).split()[0]
+                
+            points_match = re.search(r'(\d+)\s+points', gcp_text, re.IGNORECASE)
+            if points_match:
+                gcp_stats["points"] = points_match.group(1)
+                
+            member_match = re.search(r'Member\s+since\s+(\d{4})', gcp_text, re.IGNORECASE)
+            if member_match:
+                gcp_stats["member_since"] = member_match.group(1)
+                
+            # Count badges
+            badges_count = len(re.findall(r'Earned\s+', gcp_text, re.IGNORECASE))
+            gcp_stats["badges_count"] = str(badges_count)
+            print("Successfully fetched GCP stats:", gcp_stats)
+        except Exception as e:
+            print(f"Failed to fetch Google Cloud stats: {e}")
+            
         await browser.close()
         
         # Write Stats SVG
         svg_content = generate_svg(stats)
+        gcp_svg_content = generate_gcp_svg(gcp_stats)
         if not dry_run:
             with open("assets/thm-stats.svg", "w") as f:
                 f.write(svg_content)
             print("Saved stats SVG to assets/thm-stats.svg")
+            
+            with open("assets/gcp-stats.svg", "w") as f:
+                f.write(gcp_svg_content)
+            print("Saved GCP stats SVG to assets/gcp-stats.svg")
         else:
             print("[Dry-run] Generated SVG Content:\n", svg_content)
+            print("[Dry-run] Generated GCP SVG Content:\n", gcp_svg_content)
             
         # Update README
         if not dry_run:

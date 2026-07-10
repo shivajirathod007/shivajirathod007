@@ -181,9 +181,19 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ### ⬡ Cloud Security & Learning
 
+<!-- gcp-stats-start -->
+<div align="center">
+  <a href="https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063" target="_blank">
+    <img src="assets/gcp-stats.svg" alt="Google Cloud Skills Boost Stats" width="480" />
+  </a>
+</div>
+
+<br/>
+
 **Google Cloud Skills Boost Profile:** [Google Cloud Profile](https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063)
 
 > Hands-on labs and learning paths focusing on cloud infrastructure security, IAM policy design, and security architecture.
+<!-- gcp-stats-end -->
 
 ---
 
