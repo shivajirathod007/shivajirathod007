@@ -32,7 +32,7 @@ jobs:
 
       - name: Run TryHackMe Scraper Script
         run: |
-          python scripts/update_stats.py --username hey.nexxum
+          xvfb-run python scripts/update_stats.py --username hey.nexxum
 
       - name: Commit and Push Changes
         run: |

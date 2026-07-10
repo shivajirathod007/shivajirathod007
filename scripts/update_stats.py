@@ -103,7 +103,14 @@ async def run(username, dry_run=False):
     async with async_playwright() as p:
         # Use local system Google Chrome if available (to bypass local download issues)
         chrome_path = "/usr/bin/google-chrome"
-        launch_args = {"headless": True}
+        launch_args = {
+            "headless": False,  # Running headful is the most reliable way to bypass Cloudflare/Vercel
+            "args": [
+                "--disable-blink-features=AutomationControlled",
+                "--no-sandbox",
+                "--disable-setuid-sandbox"
+            ]
+        }
         if os.path.exists(chrome_path):
             launch_args["executable_path"] = chrome_path
             print(f"Using system Google Chrome at: {chrome_path}")
@@ -113,70 +120,76 @@ async def run(username, dry_run=False):
             viewport={"width": 1280, "height": 1080},
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
+        
+        # Anti-bot bypass: remove the navigator.webdriver property
+        await context.add_init_script("delete Object.getPrototypeOf(navigator).webdriver;")
+        
         page = await context.new_page()
         
-        # Load Completed Rooms page
-        url_completed = f"https://tryhackme.com/p/{username}?tab=completed-rooms"
-        print(f"Navigating to: {url_completed}")
+        # Load profile page first to initialize security/session bypass
+        url_profile = f"https://tryhackme.com/p/{username}"
+        print(f"Navigating to profile: {url_profile}")
         try:
-            await page.goto(url_completed, wait_until="domcontentloaded", timeout=45000)
-            await page.wait_for_selector("text=Completed rooms", timeout=20000)
+            await page.goto(url_profile, wait_until="domcontentloaded", timeout=45000)
+            await page.wait_for_timeout(3000)
         except Exception as e:
-            print(f"Completed rooms page navigation/load warning: {e}. Attempting to proceed...")
-        await page.wait_for_timeout(3000) # extra wait for dynamic JS content
-        
-        # Extract profile stats
-        print("Extracting profile statistics...")
-        stats = await page.evaluate(JS_EXTRACT_STATS)
-        
-        # If JS extraction was incomplete, try fallback regex on page text
-        page_text = await page.evaluate("document.body.innerText")
-        
-        if stats.get('rank') == 'N/A':
-            rank_match = re.search(r'Rank\s+(Top\s+\d+%)', page_text, re.IGNORECASE)
-            if rank_match:
-                stats['rank'] = rank_match.group(1)
-            else:
-                rank_match = re.search(r'(Top\s+\d+%)\s+Rank', page_text, re.IGNORECASE)
-                if rank_match:
-                    stats['rank'] = rank_match.group(1)
-                    
-        if stats.get('badges') == 'N/A':
-            badges_match = re.search(r'Badges\s+(\d+)', page_text, re.IGNORECASE)
-            if badges_match:
-                stats['badges'] = badges_match.group(1)
-                
-        if stats.get('streak') == '0':
-            streak_match = re.search(r'Streak\s+(\d+)', page_text, re.IGNORECASE)
-            if streak_match:
-                stats['streak'] = streak_match.group(1)
-                
-        if stats.get('completed') == '0':
-            completed_match = re.search(r'Completed rooms\s+(\d+)', page_text, re.IGNORECASE)
-            if completed_match:
-                stats['completed'] = completed_match.group(1)
-        
-        print("Extracted Stats:", stats)
-        
-        # Extract room names and links
-        print("Extracting completed rooms list...")
-        rooms = []
-        room_elements = await page.locator("a[href*='/room/']").all()
-        for el in room_elements:
-            text = await el.inner_text()
-            href = await el.get_attribute("href")
-            lines = [l.strip() for l in text.split("\n") if l.strip()]
-            if lines and href:
-                room_name = lines[0]
-                # Avoid non-room strings or duplicates
-                if room_name and room_name not in [r['name'] for r in rooms]:
-                    full_href = f"https://tryhackme.com{href}" if href.startswith("/") else href
-                    rooms.append({
-                        "name": room_name,
-                        "link": full_href
+            print(f"Profile page navigation warning: {e}. Attempting to proceed...")
+
+        # Fetch stats using TryHackMe v2 API (within verified browser context)
+        print("Fetching profile statistics from API...")
+        stats = {'rank': 'N/A', 'badges': 'N/A', 'streak': '0', 'completed': '0'}
+        try:
+            profile_data = await page.evaluate(
+                f"async () => {{ const r = await fetch('https://tryhackme.com/api/v2/public-profile?username={username}'); return await r.json(); }}"
+            )
+            if profile_data.get("status") == "success" and "data" in profile_data:
+                u_data = profile_data["data"]
+                stats["rank"] = u_data.get("rank", "N/A")
+                stats["badges"] = str(u_data.get("badgesNumber", "N/A"))
+                stats["completed"] = str(u_data.get("completedRoomsNumber", "N/A"))
+                stats["streak"] = str(u_data.get("streak", "0"))
+                print("Successfully fetched stats from API!")
+        except Exception as e:
+            print(f"API stats fetch failed: {e}. Falling back to DOM parsing...")
+            try:
+                stats = await page.evaluate(JS_EXTRACT_STATS)
+            except Exception as dom_err:
+                print(f"DOM parsing fallback failed: {dom_err}")
+
+        # Fetch completed rooms from TryHackMe v2 API
+        print("Fetching completed rooms list from API...")
+        top_rooms = []
+        try:
+            rooms_data = await page.evaluate(
+                f"async () => {{ const r = await fetch('https://tryhackme.com/api/v2/public-profile/completed-rooms?username={username}&limit=3&page=1'); return await r.json(); }}"
+            )
+            if rooms_data.get("status") == "success" and "data" in rooms_data:
+                docs = rooms_data["data"].get("docs", [])
+                for doc in docs:
+                    top_rooms.append({
+                        "name": doc.get("title", ""),
+                        "link": f"https://tryhackme.com/room/{doc.get('code', '')}"
                     })
-                    
-        top_rooms = rooms[:3]
+                print("Successfully fetched completed rooms from API!")
+        except Exception as e:
+            print(f"API completed rooms fetch failed: {e}. Falling back to DOM parsing...")
+            try:
+                rooms = []
+                room_elements = await page.locator("a[href*='/room/']").all()
+                for el in room_elements:
+                    text = await el.inner_text()
+                    href = await el.get_attribute("href")
+                    lines = [l.strip() for l in text.split("\n") if l.strip()]
+                    if lines and href:
+                        room_name = lines[0]
+                        if room_name and room_name not in [r['name'] for r in rooms]:
+                            full_href = f"https://tryhackme.com{href}" if href.startswith("/") else href
+                            rooms.append({"name": room_name, "link": full_href})
+                top_rooms = rooms[:3]
+            except Exception as dom_err:
+                print(f"DOM rooms parsing fallback failed: {dom_err}")
+                
+        print("Final Stats:", stats)
         print("Top 3 Completed Rooms:")
         for idx, r in enumerate(top_rooms):
             print(f" {idx+1}. {r['name']} ({r['link']})")
@@ -186,11 +199,11 @@ async def run(username, dry_run=False):
         print(f"Navigating to: {url_activity}")
         try:
             await page.goto(url_activity, wait_until="domcontentloaded", timeout=45000)
-            await page.wait_for_selector("text=Yearly activity", timeout=20000)
+            await page.wait_for_selector("text=Yearly activity", timeout=25000)
+            await page.wait_for_timeout(3000)
         except Exception as e:
-            print(f"Yearly activity page navigation/load warning: {e}. Attempting to proceed...")
-        await page.wait_for_timeout(3000)
-        
+            print(f"Yearly activity page navigation warning: {e}. Attempting to proceed...")
+            
         # Screenshot Yearly Activity heatmap
         print("Locating Yearly Activity heatmap container...")
         heatmap_handle = await page.evaluate_handle(JS_FIND_HEATMAP)
@@ -199,9 +212,8 @@ async def run(username, dry_run=False):
         if heatmap_element:
             print("Found heatmap container. Capturing screenshot...")
             if not dry_run:
-                # Scroll to it
                 await heatmap_element.scroll_into_view_if_needed()
-                await page.wait_for_timeout(1000)
+                await page.wait_for_timeout(1500)
                 await heatmap_element.screenshot(path="assets/thm-yearly-activity.png")
                 print("Saved screenshot to assets/thm-yearly-activity.png")
             else:
