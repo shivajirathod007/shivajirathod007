@@ -6,7 +6,7 @@ import argparse
 from playwright.async_api import async_playwright
 
 # Selector helpers for TryHackMe page
-JS_EXTRACT_STATS = """
+JS_EXTRACT_STATS = r"""
 () => {
   const stats = { rank: 'N/A', badges: 'N/A', streak: '0', completed: '0' };
   
@@ -17,16 +17,18 @@ JS_EXTRACT_STATS = """
     const text = el.innerText || '';
     const lines = text.split('\\n').map(s => s.trim()).filter(Boolean);
     
-    for (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length - 1; i++) {
       const line = lines[i];
-      if (line === 'Rank' && i + 1 < lines.length) {
-        stats.rank = lines[i+1];
-      } else if (line === 'Badges' && i + 1 < lines.length) {
-        stats.badges = lines[i+1];
-      } else if (line === 'Streak' && i + 1 < lines.length) {
-        stats.streak = lines[i+1];
-      } else if (line === 'Completed rooms' && i + 1 < lines.length) {
-        stats.completed = lines[i+1];
+      const val = lines[i+1];
+      
+      if (line === 'Rank' && (val.includes('Top') || /^\d+$/.test(val))) {
+        stats.rank = val;
+      } else if (line === 'Badges' && /^\d+$/.test(val)) {
+        stats.badges = val;
+      } else if (line === 'Streak' && /^\d+$/.test(val)) {
+        stats.streak = val;
+      } else if (line === 'Completed rooms' && /^\d+$/.test(val)) {
+        stats.completed = val;
       }
     }
   });
@@ -99,7 +101,14 @@ async def run(username, dry_run=False):
         os.makedirs("assets", exist_ok=True)
         
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        # Use local system Google Chrome if available (to bypass local download issues)
+        chrome_path = "/usr/bin/google-chrome"
+        launch_args = {"headless": True}
+        if os.path.exists(chrome_path):
+            launch_args["executable_path"] = chrome_path
+            print(f"Using system Google Chrome at: {chrome_path}")
+            
+        browser = await p.chromium.launch(**launch_args)
         context = await browser.new_context(
             viewport={"width": 1280, "height": 1080},
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -109,8 +118,12 @@ async def run(username, dry_run=False):
         # Load Completed Rooms page
         url_completed = f"https://tryhackme.com/p/{username}?tab=completed-rooms"
         print(f"Navigating to: {url_completed}")
-        await page.goto(url_completed, wait_until="networkidle", timeout=60000)
-        await page.wait_for_timeout(5000) # extra wait for dynamic JS content
+        try:
+            await page.goto(url_completed, wait_until="domcontentloaded", timeout=45000)
+            await page.wait_for_selector("text=Completed rooms", timeout=20000)
+        except Exception as e:
+            print(f"Completed rooms page navigation/load warning: {e}. Attempting to proceed...")
+        await page.wait_for_timeout(3000) # extra wait for dynamic JS content
         
         # Extract profile stats
         print("Extracting profile statistics...")
@@ -171,8 +184,12 @@ async def run(username, dry_run=False):
         # Navigate to Yearly Activity
         url_activity = f"https://tryhackme.com/p/{username}?tab=yearly-activity"
         print(f"Navigating to: {url_activity}")
-        await page.goto(url_activity, wait_until="networkidle", timeout=60000)
-        await page.wait_for_timeout(5000)
+        try:
+            await page.goto(url_activity, wait_until="domcontentloaded", timeout=45000)
+            await page.wait_for_selector("text=Yearly activity", timeout=20000)
+        except Exception as e:
+            print(f"Yearly activity page navigation/load warning: {e}. Attempting to proceed...")
+        await page.wait_for_timeout(3000)
         
         # Screenshot Yearly Activity heatmap
         print("Locating Yearly Activity heatmap container...")
@@ -228,7 +245,9 @@ def update_readme(top_rooms):
         
     stats_replacement = f"""<!-- thm-stats-start -->
 <div align="center">
-  <img src="assets/thm-stats.svg" alt="TryHackMe Stats" width="480" />
+  <a href="https://tryhackme.com/p/hey.nexxum" target="_blank">
+    <img src="assets/thm-stats.svg" alt="TryHackMe Stats" width="480" />
+  </a>
 </div>
 
 <br/>
