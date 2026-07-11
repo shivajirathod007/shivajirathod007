@@ -151,6 +151,10 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ### ⬡ TryHackMe Activity
 
+> **TryHackMe Profile:** [@hey.nexxum](https://tryhackme.com/p/hey.nexxum)
+>
+> Actively training on TryHackMe, solving labs spanning offensive security (web exploitation, network reconnaissance, infrastructure pentesting), and defensive security (traffic analysis, incident response, vulnerability analysis).
+
 <!-- thm-stats-start -->
 <div align="center">
   <a href="https://tryhackme.com/p/hey.nexxum" target="_blank">
@@ -172,18 +176,16 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ### ⬡ Cloud Security & Learning
 
+> **Google Cloud Skills Boost:** [Public Profile](https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063)
+>
+> Engaging in Google Cloud's security engineering curriculum to design, construct, and manage secure cloud infrastructures using GCP native security controls (IAM, VPC Service Controls, Cloud KMS, and Cloud Armor).
+
 <!-- gcp-stats-start -->
 <div align="center">
   <a href="https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063" target="_blank">
     <img src="assets/gcp-stats.svg" alt="Google Cloud Skills Boost Stats" width="480" />
   </a>
 </div>
-
-<br/>
-
-**Google Cloud Skills Boost Profile:** [Google Cloud Profile](https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063)
-
-> Hands-on labs and learning paths focusing on cloud infrastructure security, IAM policy design, and security architecture.
 <!-- gcp-stats-end -->
 
 ---
@@ -203,13 +205,44 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ---
 
-### ⬡ Certifications
+### ⬡ Certifications & Training
 
+```zsh
+┌──(kaal㉿system)-[~/credentials]
+└─$ cat certifications.json
+{
+  "certifications": [
+    {
+      "name": "Google Cloud Cybersecurity Certificate (Path)",
+      "issuer": "Google",
+      "status": "In Progress (Diamond League, 3500+ points)",
+      "completed_courses": [
+        "Introduction to Security Principles in Cloud Computing"
+      ]
+    },
+    {
+      "name": "Cyber Threat Intelligence (CTI)",
+      "issuer": "Arcx",
+      "year": "2025",
+      "skills": ["Threat Hunting", "ATT&CK Mapping", "OSINT", "IOC Analysis"]
+    },
+    {
+      "name": "Computer Forensics & DFIR",
+      "issuer": "Udemy",
+      "year": "2025",
+      "skills": ["Memory Forensics", "Incident Response", "Log Auditing", "Autopsy"]
+    }
+  ]
+}
 ```
-Cyber Threat Intelligence     Arcx      2025
-Computer Forensics & DFIR     Udemy     2025
-Cloud Security Engineer Path  Google    2026
-```
+
+#### ⬡ Highlighted Courses & Paths
+
+* **Google Cloud Cybersecurity Pathway** (In Progress)
+  * *Course 1: Introduction to Security Principles in Cloud Computing* — Completed. Focuses on security lifecycle, cloud transition architecture, automated tools for cloud security analysts, and GCP IAM policies.
+* **TryHackMe Training Paths**
+  * *Pre-Security Path* (Completed) — Foundational networks (OSI model, HTTP in-detail, LAN routing) and Linux system fundamentals.
+  * *Intro to Cyber Security* (Completed) — Web app security basics, defensive operations, and threat model foundations.
 
 ---
 
