@@ -392,14 +392,6 @@ def update_readme(top_rooms):
     with open(readme_path, "r") as f:
         readme_content = f.read()
         
-    # Generate the replacement block
-    rooms_table_rows = ""
-    for r in top_rooms:
-        rooms_table_rows += f"| **{r['name']}** | [Room Link]({r['link']}) |\n"
-        
-    if not rooms_table_rows:
-        rooms_table_rows = "| *No recent rooms found* | - |\n"
-        
     stats_replacement = f"""<!-- thm-stats-start -->
 <div align="center">
   <a href="https://tryhackme.com/p/hey.nexxum" target="_blank">
@@ -407,12 +399,6 @@ def update_readme(top_rooms):
   </a>
 </div>
 
-<br/>
-
-#### ⬡ Recent Completed Rooms
-| Room Name | Link |
-| :--- | :--- |
-{rooms_table_rows}
 <br/>
 
 #### ⬡ TryHackMe Yearly Activity

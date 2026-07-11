@@ -160,15 +160,6 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 <br/>
 
-#### ⬡ Recent Completed Rooms
-| Room Name | Link |
-| :--- | :--- |
-| **Linux Fundamentals Part 1** | [Room Link](https://tryhackme.com/room/linuxfundamentalspart1) |
-| **Linux Fundamentals Part 2** | [Room Link](https://tryhackme.com/room/linuxfundamentalspart2) |
-| **Linux Fundamentals Part 3** | [Room Link](https://tryhackme.com/room/linuxfundamentalspart3) |
-
-<br/>
-
 #### ⬡ TryHackMe Yearly Activity
 <div align="center">
   <a href="https://tryhackme.com/p/hey.nexxum?tab=yearly-activity" target="_blank">
