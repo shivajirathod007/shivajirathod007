@@ -5,9 +5,9 @@ import sys
 import argparse
 from playwright.async_api import async_playwright
 try:
-    from playwright_stealth import stealth_async
+    from playwright_stealth import Stealth
 except ImportError:
-    stealth_async = None
+    Stealth = None
 
 # Selector helpers for TryHackMe page
 JS_EXTRACT_STATS = r"""
@@ -49,7 +49,7 @@ JS_FIND_HEATMAP = """
   for (const div of divs) {
     const rect = div.getBoundingClientRect();
     const area = rect.width * rect.height;
-    if (area < 10000) continue; // too small to be the heatmap card
+    if (rect.height < 150 || rect.width < 500) continue; // must be a large container card
     const text = div.innerText || '';
     if (text.includes('Yearly activity') && (div.querySelector('svg') || div.querySelectorAll('*').length > 50)) {
       if (area < minArea) {
@@ -139,26 +139,33 @@ async def run(username, dry_run=False):
     if not dry_run:
         os.makedirs("assets", exist_ok=True)
         
-    async with async_playwright() as p:
-        # Configure launch options for stealth & system browser execution
-        chrome_path = "/usr/bin/google-chrome"
-        launch_args = {
-            "headless": False,  # Running headful is the most reliable way to bypass Cloudflare/Vercel
-            "args": [
-                "--disable-blink-features=AutomationControlled",
-                "--no-sandbox",
-                "--disable-setuid-sandbox"
-            ]
-        }
-        
-        # Use Chrome channel on GitHub Actions (pre-installed), or local path
-        if os.environ.get("GITHUB_ACTIONS") == "true":
-            launch_args["channel"] = "chrome"
-            print("Running on GitHub Actions: Using pre-installed Chrome channel")
-        elif os.path.exists(chrome_path):
-            launch_args["executable_path"] = chrome_path
-            print(f"Using system Google Chrome at: {chrome_path}")
-            
+    # Configure launch options for stealth & system browser execution
+    chrome_path = "/usr/bin/google-chrome"
+    launch_args = {
+        "headless": False,  # Running headful is the most reliable way to bypass Cloudflare/Vercel
+        "args": [
+            "--disable-blink-features=AutomationControlled",
+            "--no-sandbox",
+            "--disable-setuid-sandbox"
+        ]
+    }
+    
+    # Use Chrome channel on GitHub Actions (pre-installed), or local path
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        launch_args["channel"] = "chrome"
+        print("Running on GitHub Actions: Using pre-installed Chrome channel")
+    elif os.path.exists(chrome_path):
+        launch_args["executable_path"] = chrome_path
+        print(f"Using system Google Chrome at: {chrome_path}")
+
+    # Use Stealth if available to wrap the playwright manager
+    if Stealth:
+        playwright_cm = Stealth().use_async(async_playwright())
+        print("Stealth mode enabled for the browser session.")
+    else:
+        playwright_cm = async_playwright()
+
+    async with playwright_cm as p:
         browser = await p.chromium.launch(**launch_args)
         context = await browser.new_context(
             viewport={"width": 1280, "height": 1080},
@@ -170,73 +177,118 @@ async def run(username, dry_run=False):
         
         page = await context.new_page()
         
-        # Apply playwright stealth if available
-        if stealth_async:
-            await stealth_async(page)
-            print("Stealth mode enabled for the browser session.")
+        # Set up response interceptors to capture TryHackMe API payloads passively
+        profile_data = None
+        rooms_data = None
+        yearly_activity_data = None
+        
+        async def handle_response(response):
+            nonlocal profile_data, rooms_data, yearly_activity_data
+            url = response.url
+            if "api/v2/public-profile?username=" in url:
+                try:
+                    profile_data = await response.json()
+                    print("Intercepted public-profile API response!")
+                except Exception as e:
+                    print(f"Failed to parse public-profile JSON: {e}")
+            elif "api/v2/public-profile/completed-rooms?username=" in url:
+                try:
+                    rooms_data = await response.json()
+                    print("Intercepted completed-rooms API response!")
+                except Exception as e:
+                    print(f"Failed to parse completed-rooms JSON: {e}")
+            elif "api/v2/public-profile/yearly-activity?username=" in url:
+                try:
+                    yearly_activity_data = await response.json()
+                    print("Intercepted yearly-activity API response!")
+                except Exception as e:
+                    print(f"Failed to parse yearly-activity JSON: {e}")
+
+        page.on("response", handle_response)
         
         # Load profile page first to initialize security/session bypass
         url_profile = f"https://tryhackme.com/p/{username}"
         print(f"Navigating to profile: {url_profile}")
         try:
             await page.goto(url_profile, wait_until="domcontentloaded", timeout=45000)
-            await page.wait_for_timeout(3000)
+            # Wait up to 5 seconds for background API responses to be intercepted
+            for _ in range(10):
+                await page.wait_for_timeout(500)
+                if profile_data and rooms_data:
+                    break
         except Exception as e:
             print(f"Profile page navigation warning: {e}. Attempting to proceed...")
 
-        # Fetch stats using TryHackMe v2 API (within verified browser context)
-        print("Fetching profile statistics from API...")
+        # Process / Fetch profile statistics
         stats = {'rank': 'N/A', 'badges': 'N/A', 'streak': '0', 'completed': '0'}
-        try:
-            profile_data = await page.evaluate(
-                f"async () => {{ const r = await fetch('https://tryhackme.com/api/v2/public-profile?username={username}'); return await r.json(); }}"
-            )
-            if profile_data.get("status") == "success" and "data" in profile_data:
-                u_data = profile_data["data"]
-                stats["rank"] = u_data.get("rank", "N/A")
-                stats["badges"] = str(u_data.get("badgesNumber", "N/A"))
-                stats["completed"] = str(u_data.get("completedRoomsNumber", "N/A"))
-                stats["streak"] = str(u_data.get("streak", "0"))
-                print("Successfully fetched stats from API!")
-        except Exception as e:
-            print(f"API stats fetch failed: {e}. Falling back to DOM parsing...")
+        if profile_data and profile_data.get("status") == "success" and "data" in profile_data:
+            print("Using intercepted profile statistics!")
+            u_data = profile_data["data"]
+            stats["rank"] = u_data.get("rank", "N/A")
+            stats["badges"] = str(u_data.get("badgesNumber", "N/A"))
+            stats["completed"] = str(u_data.get("completedRoomsNumber", "N/A"))
+            stats["streak"] = str(u_data.get("streak", "0"))
+        else:
+            print("Fetching profile statistics from API fallback...")
             try:
-                stats = await page.evaluate(JS_EXTRACT_STATS)
-            except Exception as dom_err:
-                print(f"DOM parsing fallback failed: {dom_err}")
+                eval_data = await page.evaluate(
+                    f"async () => {{ const r = await fetch('https://tryhackme.com/api/v2/public-profile?username={username}'); return await r.json(); }}"
+                )
+                if eval_data.get("status") == "success" and "data" in eval_data:
+                    u_data = eval_data["data"]
+                    stats["rank"] = u_data.get("rank", "N/A")
+                    stats["badges"] = str(u_data.get("badgesNumber", "N/A"))
+                    stats["completed"] = str(u_data.get("completedRoomsNumber", "N/A"))
+                    stats["streak"] = str(u_data.get("streak", "0"))
+                    print("Successfully fetched stats from API via page.evaluate!")
+            except Exception as e:
+                print(f"API stats fetch failed: {e}. Falling back to DOM parsing...")
+                try:
+                    stats = await page.evaluate(JS_EXTRACT_STATS)
+                except Exception as dom_err:
+                    print(f"DOM parsing fallback failed: {dom_err}")
 
-        # Fetch completed rooms from TryHackMe v2 API
-        print("Fetching completed rooms list from API...")
+        # Process / Fetch completed rooms
         top_rooms = []
-        try:
-            rooms_data = await page.evaluate(
-                f"async () => {{ const r = await fetch('https://tryhackme.com/api/v2/public-profile/completed-rooms?username={username}&limit=3&page=1'); return await r.json(); }}"
-            )
-            if rooms_data.get("status") == "success" and "data" in rooms_data:
-                docs = rooms_data["data"].get("docs", [])
-                for doc in docs:
-                    top_rooms.append({
-                        "name": doc.get("title", ""),
-                        "link": f"https://tryhackme.com/room/{doc.get('code', '')}"
-                    })
-                print("Successfully fetched completed rooms from API!")
-        except Exception as e:
-            print(f"API completed rooms fetch failed: {e}. Falling back to DOM parsing...")
+        if rooms_data and rooms_data.get("status") == "success" and "data" in rooms_data:
+            print("Using intercepted completed rooms!")
+            docs = rooms_data["data"].get("docs", [])
+            for doc in docs[:3]:
+                top_rooms.append({
+                    "name": doc.get("title", ""),
+                    "link": f"https://tryhackme.com/room/{doc.get('code', '')}"
+                })
+        else:
+            print("Fetching completed rooms list from API fallback...")
             try:
-                rooms = []
-                room_elements = await page.locator("a[href*='/room/']").all()
-                for el in room_elements:
-                    text = await el.inner_text()
-                    href = await el.get_attribute("href")
-                    lines = [l.strip() for l in text.split("\n") if l.strip()]
-                    if lines and href:
-                        room_name = lines[0]
-                        if room_name and room_name not in [r['name'] for r in rooms]:
-                            full_href = f"https://tryhackme.com{href}" if href.startswith("/") else href
-                            rooms.append({"name": room_name, "link": full_href})
-                top_rooms = rooms[:3]
-            except Exception as dom_err:
-                print(f"DOM rooms parsing fallback failed: {dom_err}")
+                eval_rooms = await page.evaluate(
+                    f"async () => {{ const r = await fetch('https://tryhackme.com/api/v2/public-profile/completed-rooms?username={username}&limit=3&page=1'); return await r.json(); }}"
+                )
+                if eval_rooms.get("status") == "success" and "data" in eval_rooms:
+                    docs = eval_rooms["data"].get("docs", [])
+                    for doc in docs:
+                        top_rooms.append({
+                            "name": doc.get("title", ""),
+                            "link": f"https://tryhackme.com/room/{doc.get('code', '')}"
+                        })
+                    print("Successfully fetched completed rooms from API via page.evaluate!")
+            except Exception as e:
+                print(f"API completed rooms fetch failed: {e}. Falling back to DOM parsing...")
+                try:
+                    rooms = []
+                    room_elements = await page.locator("a[href*='/room/']").all()
+                    for el in room_elements:
+                        text = await el.inner_text()
+                        href = await el.get_attribute("href")
+                        lines = [l.strip() for l in text.split("\n") if l.strip()]
+                        if lines and href:
+                            room_name = lines[0]
+                            if room_name and room_name not in [r['name'] for r in rooms]:
+                                full_href = f"https://tryhackme.com{href}" if href.startswith("/") else href
+                                rooms.append({"name": room_name, "link": full_href})
+                    top_rooms = rooms[:3]
+                except Exception as dom_err:
+                    print(f"DOM rooms parsing fallback failed: {dom_err}")
                 
         print("Final Stats:", stats)
         print("Top 3 Completed Rooms:")
@@ -249,7 +301,16 @@ async def run(username, dry_run=False):
         try:
             await page.goto(url_activity, wait_until="domcontentloaded", timeout=45000)
             await page.wait_for_selector("text=Yearly activity", timeout=25000)
-            await page.wait_for_timeout(3000)
+            
+            # Wait up to 10 seconds for yearly activity API response to be intercepted
+            print("Waiting for yearly activity API response...")
+            for _ in range(20):
+                await page.wait_for_timeout(500)
+                if yearly_activity_data:
+                    break
+            
+            # Give heatmap additional time to render
+            await page.wait_for_timeout(2000)
         except Exception as e:
             print(f"Yearly activity page navigation warning: {e}. Attempting to proceed...")
             
