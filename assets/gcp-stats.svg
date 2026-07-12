@@ -24,7 +24,7 @@
   
   <!-- Column 3: Points -->
   <text x="280" y="55" class="label">POINTS</text>
-  <text x="280" y="80" class="value">3558</text>
+  <text x="280" y="80" class="value">3690</text>
   
   <!-- Column 4: Badges -->
   <text x="380" y="55" class="label">BADGES</text>
