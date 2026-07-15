@@ -28,5 +28,5 @@
   
   <!-- Column 4: Streak -->
   <text x="380" y="55" class="label">STREAK</text>
-  <text x="380" y="80" class="value">10 🔥</text>
+  <text x="380" y="80" class="value">11 🔥</text>
 </svg>
