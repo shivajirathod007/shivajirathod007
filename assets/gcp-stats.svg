@@ -20,13 +20,13 @@
   
   <!-- Column 2: League -->
   <text x="140" y="55" class="label">LEAGUE</text>
-  <text x="140" y="80" class="value">Diamond 💎</text>
+  <text x="140" y="80" class="value">N/A 💎</text>
   
   <!-- Column 3: Points -->
   <text x="280" y="55" class="label">POINTS</text>
-  <text x="280" y="80" class="value">3917</text>
+  <text x="280" y="80" class="value">0</text>
   
   <!-- Column 4: Badges -->
   <text x="380" y="55" class="label">BADGES</text>
-  <text x="380" y="80" class="value">1</text>
+  <text x="380" y="80" class="value">0</text>
 </svg>
