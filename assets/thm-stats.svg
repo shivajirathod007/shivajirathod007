@@ -20,7 +20,7 @@
   
   <!-- Column 2: Completed -->
   <text x="130" y="55" class="label">COMPLETED ROOMS</text>
-  <text x="130" y="80" class="value">28</text>
+  <text x="130" y="80" class="value">29</text>
   
   <!-- Column 3: Badges -->
   <text x="280" y="55" class="label">BADGES</text>
@@ -28,5 +28,5 @@
   
   <!-- Column 4: Streak -->
   <text x="380" y="55" class="label">STREAK</text>
-  <text x="380" y="80" class="value">17 🔥</text>
+  <text x="380" y="80" class="value">19 🔥</text>
 </svg>
