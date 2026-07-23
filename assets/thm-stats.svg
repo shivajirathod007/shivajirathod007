@@ -20,7 +20,7 @@
   
   <!-- Column 2: Completed -->
   <text x="130" y="55" class="label">COMPLETED ROOMS</text>
-  <text x="130" y="80" class="value">29</text>
+  <text x="130" y="80" class="value">30</text>
   
   <!-- Column 3: Badges -->
   <text x="280" y="55" class="label">BADGES</text>
