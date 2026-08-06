@@ -16,7 +16,7 @@
   <!-- Stats columns -->
   <!-- Column 1: Rank -->
   <text x="20" y="55" class="label">RANK</text>
-  <text x="20" y="80" class="value">211641</text>
+  <text x="20" y="80" class="value">211856</text>
   
   <!-- Column 2: Completed -->
   <text x="130" y="55" class="label">COMPLETED ROOMS</text>
@@ -28,5 +28,5 @@
   
   <!-- Column 4: Streak -->
   <text x="380" y="55" class="label">STREAK</text>
-  <text x="380" y="80" class="value">32 🔥</text>
+  <text x="380" y="80" class="value">33 🔥</text>
 </svg>
