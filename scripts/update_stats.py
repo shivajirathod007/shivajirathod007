@@ -381,20 +381,21 @@ async def run(username, dry_run=False):
             
         # Update README
         if not dry_run:
-            update_readme(top_rooms)
-            
-def update_readme(top_rooms):
+            update_readme(username, top_rooms)
+
+
+def update_readme(username, top_rooms):
     readme_path = "README.md"
     if not os.path.exists(readme_path):
         print(f"Error: {readme_path} not found.")
         return
-        
+
     with open(readme_path, "r") as f:
         readme_content = f.read()
-        
+
     stats_replacement = f"""<!-- thm-stats-start -->
 <div align="center">
-  <a href="https://tryhackme.com/p/hey.nexxum" target="_blank">
+  <a href="https://tryhackme.com/p/{username}" target="_blank">
     <img src="assets/thm-stats.svg" alt="TryHackMe Stats" width="480" />
   </a>
 </div>
@@ -403,7 +404,7 @@ def update_readme(top_rooms):
 
 #### ⬡ TryHackMe Yearly Activity
 <div align="center">
-  <a href="https://tryhackme.com/p/hey.nexxum?tab=yearly-activity" target="_blank">
+  <a href="https://tryhackme.com/p/{username}?tab=yearly-activity" target="_blank">
     <img src="assets/thm-yearly-activity.png" alt="TryHackMe Yearly Activity" width="100%" style="border-radius: 6px; border: 1px solid #30363d;" />
   </a>
 </div>
@@ -421,7 +422,7 @@ def update_readme(top_rooms):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Scrape TryHackMe stats and update README.")
-    parser.add_argument("--username", default="hey.nexxum", help="TryHackMe username to scrape.")
+    parser.add_argument("--username", default="im.rahasya", help="TryHackMe username to scrape.")
     parser.add_argument("--dry-run", action="store_true", help="Print stats instead of writing files.")
     args = parser.parse_args()
     

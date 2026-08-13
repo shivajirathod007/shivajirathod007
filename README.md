@@ -12,7 +12,7 @@
 
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shivajirathod007)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/shivaji-rathod007)
-[![TryHackMe](https://img.shields.io/badge/-TryHackMe-1F1F2E?style=for-the-badge&logo=tryhackme&logoColor=red)](https://tryhackme.com/p/hey.nexxum)
+[![TryHackMe](https://img.shields.io/badge/-TryHackMe-1F1F2E?style=for-the-badge&logo=tryhackme&logoColor=red)](https://tryhackme.com/p/im.rahasya)
 [![Google Skills](https://img.shields.io/badge/-Google%20Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white)](https://www.skills.google/public_profiles/85175627-c0be-4a34-9375-b21587ed7063)
 [![Instagram](https://img.shields.io/badge/-Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_.shiva_.007/)
 
@@ -151,13 +151,13 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 ### ⬡ TryHackMe Activity
 
-> **TryHackMe Profile:** [@hey.nexxum](https://tryhackme.com/p/hey.nexxum)
+> **TryHackMe Profile:** [@im.rahasya](https://tryhackme.com/p/im.rahasya)
 >
 > Actively training on TryHackMe, solving labs spanning offensive security (web exploitation, network reconnaissance, infrastructure pentesting), and defensive security (traffic analysis, incident response, vulnerability analysis).
 
 <!-- thm-stats-start -->
 <div align="center">
-  <a href="https://tryhackme.com/p/hey.nexxum" target="_blank">
+  <a href="https://tryhackme.com/p/im.rahasya" target="_blank">
     <img src="assets/thm-stats.svg" alt="TryHackMe Stats" width="480" />
   </a>
 </div>
@@ -166,7 +166,7 @@ Secure case management platform piloting at Warje Police Station, Pune. Role-bas
 
 #### ⬡ TryHackMe Yearly Activity
 <div align="center">
-  <a href="https://tryhackme.com/p/hey.nexxum?tab=yearly-activity" target="_blank">
+  <a href="https://tryhackme.com/p/im.rahasya?tab=yearly-activity" target="_blank">
     <img src="assets/thm-yearly-activity.png" alt="TryHackMe Yearly Activity" width="100%" style="border-radius: 6px; border: 1px solid #30363d;" />
   </a>
 </div>
