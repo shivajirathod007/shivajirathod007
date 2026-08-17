@@ -16,11 +16,11 @@
   <!-- Stats columns -->
   <!-- Column 1: Rank -->
   <text x="20" y="55" class="label">RANK</text>
-  <text x="20" y="80" class="value">162135</text>
+  <text x="20" y="80" class="value">158164</text>
   
   <!-- Column 2: Completed -->
   <text x="130" y="55" class="label">COMPLETED ROOMS</text>
-  <text x="130" y="80" class="value">63</text>
+  <text x="130" y="80" class="value">65</text>
   
   <!-- Column 3: Badges -->
   <text x="280" y="55" class="label">BADGES</text>
@@ -28,5 +28,5 @@
   
   <!-- Column 4: Streak -->
   <text x="380" y="55" class="label">STREAK</text>
-  <text x="380" y="80" class="value">43 🔥</text>
+  <text x="380" y="80" class="value">44 🔥</text>
 </svg>
