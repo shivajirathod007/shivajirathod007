@@ -16,11 +16,11 @@
   <!-- Stats columns -->
   <!-- Column 1: Rank -->
   <text x="20" y="55" class="label">RANK</text>
-  <text x="20" y="80" class="value">150987</text>
+  <text x="20" y="80" class="value">141107</text>
   
   <!-- Column 2: Completed -->
   <text x="130" y="55" class="label">COMPLETED ROOMS</text>
-  <text x="130" y="80" class="value">68</text>
+  <text x="130" y="80" class="value">72</text>
   
   <!-- Column 3: Badges -->
   <text x="280" y="55" class="label">BADGES</text>
